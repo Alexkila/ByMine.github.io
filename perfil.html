@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tigger — Datos de Perfil</title>
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="navbar" id="navbar">
+    <a href="cuenta.html" class="logo-container">
+      <div class="logo-icon"><img src="tigger.png" alt="Tigger"></div>
+      <span class="logo-wordmark">TIGGER</span>
+    </a>
+    <nav class="nav-menu">
+      <a href="cuenta.html" class="nav-link back-link">
+        <i class="ph ph-arrow-left"></i>
+        <span>VOLVER</span>
+      </a>
+    </nav>
+    <div class="nav-auth" id="nav-auth"></div>
+  </header>
+
+  <main class="main-container page-enter">
+    <section class="form-section animate-in" style="padding:0;justify-content:flex-start;">
+      <div class="form-box" style="max-width:600px;">
+
+        <div class="form-header" style="margin-bottom:var(--sp-5);">
+          <h2><i class="ph ph-user-gear"></i> DATOS DE PERFIL</h2>
+          <p>Configura tu información y verifica tu identidad. La foto es obligatoria para la autenticación de cuenta.</p>
+        </div>
+
+        <form class="tigger-form" id="profile-form"
+          onsubmit="handleSubmit(event,'profile')"
+          enctype="multipart/form-data">
+
+          <div class="form-group">
+            <label>
+              <i class="ph ph-camera"></i> FOTO DE PERFIL
+              <span style="color:var(--danger);margin-left:3px">*</span>
+            </label>
+            <p class="input-help">Sube una foto clara de tu rostro para verificación de identidad.</p>
+            <div class="avatar-dropzone" id="dropzone"
+              onclick="document.getElementById('fotoPerfil').click()">
+              <div class="avatar-preview" id="avatar-preview">
+                <i class="ph ph-user-circle"></i>
+                <span>Haz clic para subir tu foto</span>
+              </div>
+              <input type="file" id="fotoPerfil" name="fotoPerfil"
+                accept="image/*" required onchange="previewAvatar(event)">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="nombreCompleto"><i class="ph ph-user"></i> NOMBRE COMPLETO</label>
+            <input type="text" id="nombreCompleto" class="form-control"
+              placeholder="Ingresa tus nombres y apellidos" required autocomplete="name">
+          </div>
+
+          <div class="form-group">
+            <label for="dniPerfil"><i class="ph ph-card-holder"></i> DOCUMENTO DE IDENTIDAD</label>
+            <input type="text" id="dniPerfil" class="form-control"
+              placeholder="Número de documento" required inputmode="numeric">
+          </div>
+
+          <div class="form-group">
+            <label><i class="ph ph-wallet"></i> WALLET PREDETERMINADA</label>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="walletTipo" value="binance" required>
+                <span class="radio-dot"></span>
+                <span>Binance</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="walletTipo" value="bybit">
+                <span class="radio-dot"></span>
+                <span>ByBit</span>
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg btn-block form-submit-btn" id="submit-btn">
+            <i class="ph ph-floppy-disk"></i> GUARDAR Y VALIDAR CUENTA
+          </button>
+
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tab-bar">
+    <a href="home.html" class="tab-item"><i class="ph ph-house-simple"></i>INICIO</a>
+    <a href="proyectos.html" class="tab-item"><i class="ph ph-chart-line-up"></i>PLANES</a>
+    <a href="equipo.html" class="tab-item"><i class="ph ph-users-three"></i>EQUIPO</a>
+    <a href="cuenta.html" class="tab-item active"><i class="ph ph-user-circle"></i>YO</a>
+  </nav>
+
+  <div class="toast toast-success" id="toast">
+    <i class="ph ph-check-circle toast-icon"></i>
+    <span id="toast-msg">Perfil guardado</span>
+  </div>
+  <a href="https://wa.me/tu_numero" target="_blank" class="floating-support-btn">
+    <i class="ph ph-whatsapp-logo"></i>
+    <span class="support-text">SOPORTE</span>
+  </a>
+
+  <script src="script.js"></script>
+</body>
+</html>

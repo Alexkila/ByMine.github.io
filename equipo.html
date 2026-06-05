@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tigger — Equipo</title>
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="navbar" id="navbar">
+    <a href="home.html" class="logo-container">
+      <div class="logo-icon"><img src="tigger.png" alt="Tigger"></div>
+      <span class="logo-wordmark">TIGGER</span>
+    </a>
+    <nav class="nav-menu">
+      <a href="home.html" class="nav-link" data-tab="home"><i class="ph ph-house-simple"></i><span>INICIO</span></a>
+      <a href="proyectos.html" class="nav-link" data-tab="projects"><i class="ph ph-chart-line-up"></i><span>PROYECTOS</span></a>
+      <a href="equipo.html" class="nav-link active" data-tab="team"><i class="ph ph-users-three"></i><span>EQUIPO</span></a>
+      <a href="cuenta.html" class="nav-link" data-tab="me"><i class="ph ph-user-circle"></i><span>MI CUENTA</span></a>
+    </nav>
+    <div class="nav-auth" id="nav-auth"></div>
+  </header>
+
+  <main class="main-container page-enter">
+
+    <!-- REFERRAL HERO -->
+    <section class="referral-hero animate-in">
+      <p style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text-muted);margin-bottom:var(--sp-2)">TU RED DE REFERIDOS</p>
+      <h2 style="font-size:22px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;margin-bottom:var(--sp-2)">
+        <i class="ph ph-share-network" style="color:var(--accent)"></i> INVITA Y GANA
+      </h2>
+      <p style="font-size:13px;color:var(--text-secondary);max-width:50ch;line-height:1.7;margin-bottom:var(--sp-2)">
+        Comparte tu código único y obtén comisiones directas por cada operación que realice tu red. Sin límites de ingresos.
+      </p>
+
+      <div class="referral-code-box">
+        <div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px">CÓDIGO DE INVITACIÓN</div>
+          <div class="referral-code-val" id="ref-code">599583</div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="copyCode()">
+          <i class="ph ph-copy"></i> COPIAR
+        </button>
+      </div>
+
+      <div style="margin-bottom:var(--sp-4)">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:var(--sp-2)">ENLACE DE REGISTRO</div>
+        <div style="display:flex;align-items:center;gap:var(--sp-3);background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--r-md);padding:var(--sp-3) var(--sp-4);">
+          <span style="flex:1;font-size:12px;color:var(--text-muted);font-family:'Space Mono',monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="ref-link">tigger.app/ref/599583</span>
+          <button class="btn btn-subtle btn-sm" onclick="copyLink()"><i class="ph ph-copy"></i></button>
+        </div>
+      </div>
+
+      <!-- Social share -->
+      <div style="display:flex;gap:var(--sp-2);flex-wrap:wrap;">
+        <button class="btn btn-subtle btn-sm" onclick="shareWA()"><i class="ph ph-whatsapp-logo"></i> WHATSAPP</button>
+        <button class="btn btn-subtle btn-sm" onclick="shareTG()"><i class="ph ph-telegram-logo"></i> TELEGRAM</button>
+        <button class="btn btn-subtle btn-sm" onclick="copyLink()"><i class="ph ph-link"></i> COPIAR</button>
+      </div>
+    </section>
+
+    <!-- TEAM STATS -->
+    <section class="animate-in delay-1">
+      <h2 class="section-title" style="margin-bottom:var(--sp-5)"><i class="ph ph-chart-bar"></i> ESTADÍSTICAS DEL EQUIPO</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">TAMAÑO DEL EQUIPO</div>
+          <div class="stat-val brand">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">RECARGAS EQUIPO</div>
+          <div class="stat-val">$0.00</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">NUEVOS MIEMBROS</div>
+          <div class="stat-val">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">PRIMER RETIRO</div>
+          <div class="stat-val">0</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMMISSION LEVELS -->
+    <section class="animate-in delay-2">
+      <h2 class="section-title" style="margin-bottom:var(--sp-5)"><i class="ph ph-medal"></i> NIVELES DE COMISIÓN</h2>
+      <div class="level-grid">
+
+        <div class="level-card">
+          <div class="level-badge level-1">NIV<br>1</div>
+          <div class="level-stat">
+            <div class="level-stat-val">0/0</div>
+            <div class="level-stat-lbl">REGISTRADOS/VÁLIDOS</div>
+          </div>
+          <div class="level-stat">
+            <div class="level-stat-val">$0</div>
+            <div class="level-stat-lbl">INGRESOS TOTALES</div>
+          </div>
+          <div class="level-commission">10%</div>
+        </div>
+
+        <div class="level-card">
+          <div class="level-badge level-2">NIV<br>2</div>
+          <div class="level-stat">
+            <div class="level-stat-val">0/0</div>
+            <div class="level-stat-lbl">REGISTRADOS/VÁLIDOS</div>
+          </div>
+          <div class="level-stat">
+            <div class="level-stat-val">$0</div>
+            <div class="level-stat-lbl">INGRESOS TOTALES</div>
+          </div>
+          <div class="level-commission">3%</div>
+        </div>
+
+        <div class="level-card">
+          <div class="level-badge level-3">NIV<br>3</div>
+          <div class="level-stat">
+            <div class="level-stat-val">0/0</div>
+            <div class="level-stat-lbl">REGISTRADOS/VÁLIDOS</div>
+          </div>
+          <div class="level-stat">
+            <div class="level-stat-val">$0</div>
+            <div class="level-stat-lbl">INGRESOS TOTALES</div>
+          </div>
+          <div class="level-commission">1%</div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="tab-bar">
+    <a href="home.html" class="tab-item"><i class="ph ph-house-simple"></i>INICIO</a>
+    <a href="proyectos.html" class="tab-item"><i class="ph ph-chart-line-up"></i>PLANES</a>
+    <a href="equipo.html" class="tab-item active"><i class="ph ph-users-three"></i>EQUIPO</a>
+    <a href="cuenta.html" class="tab-item"><i class="ph ph-user-circle"></i>YO</a>
+  </nav>
+
+  <div class="toast toast-success" id="toast">
+    <i class="ph ph-check-circle toast-icon"></i>
+    <span id="toast-msg">Copiado</span>
+  </div>
+
+  <a href="https://wa.me/tu_numero" target="_blank" class="floating-support-btn">
+    <i class="ph ph-whatsapp-logo"></i>
+    <span class="support-text">SOPORTE</span>
+  </a>
+
+  <script src="script.js"></script>
+  <script>
+    function copyCode() {
+      const code = document.getElementById('ref-code').textContent;
+      navigator.clipboard.writeText(code).then(() => showToast('Código copiado'));
+    }
+    function copyLink() {
+      const link = document.getElementById('ref-link').textContent;
+      navigator.clipboard.writeText('https://' + link).then(() => showToast('Enlace copiado'));
+    }
+    function shareWA() {
+      window.open('https://wa.me/?text=' + encodeURIComponent('Únete a Tigger con mi código: https://tigger.app/ref/599583'));
+    }
+    function shareTG() {
+      window.open('https://t.me/share/url?url=' + encodeURIComponent('https://tigger.app/ref/599583') + '&text=' + encodeURIComponent('Únete a Tigger'));
+    }
+  </script>
+</body>
+</html>

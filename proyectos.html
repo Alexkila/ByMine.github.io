@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tigger — Proyectos</title>
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js"></script>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Investment detail modal */
+    .invest-summary {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: var(--sp-5);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-4);
+      margin: var(--sp-5) 0;
+    }
+    .invest-row { display: flex; flex-direction: column; gap: 4px; }
+    .invest-row-lbl { font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted); }
+    .invest-row-val { font-size: 15px; font-weight: 700; color: var(--text-primary); font-family: 'Space Mono', monospace; }
+    .invest-row-val.green { color: var(--success); }
+    .invest-row-val.brand { color: var(--brand); }
+
+    /* Active investments bar */
+    .invest-active-card {
+      background: linear-gradient(135deg, rgba(40,26,4,.6) 0%, rgba(14,14,18,.7) 100%);
+      border: 1px solid var(--border-brand);
+      border-radius: var(--r-xl);
+      padding: var(--sp-6);
+      display: flex; flex-direction: column; gap: var(--sp-4);
+    }
+
+    .collect-btn {
+      background: var(--success);
+      color: #09090b;
+      border: none;
+      border-radius: var(--r-md);
+      font-family: inherit; font-size: 13px; font-weight: 700;
+      letter-spacing: .05em; text-transform: uppercase;
+      padding: 10px 20px; cursor: pointer;
+      min-height: 44px;
+      transition: all var(--dur-fast) var(--ease-smooth);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .collect-btn:hover { background: #16a34a; }
+    .collect-btn:disabled { opacity: .4; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+
+  <header class="navbar" id="navbar">
+    <a href="home.html" class="logo-container">
+      <div class="logo-icon"><img src="tigger.png" alt="Tigger"></div>
+      <span class="logo-wordmark">TIGGER</span>
+    </a>
+    <nav class="nav-menu">
+      <a href="home.html" class="nav-link"><i class="ph ph-house-simple"></i><span>INICIO</span></a>
+      <a href="proyectos.html" class="nav-link active"><i class="ph ph-chart-line-up"></i><span>PROYECTOS</span></a>
+      <a href="equipo.html" class="nav-link"><i class="ph ph-users-three"></i><span>EQUIPO</span></a>
+      <a href="cuenta.html" class="nav-link"><i class="ph ph-user-circle"></i><span>MI CUENTA</span></a>
+    </nav>
+    <div class="nav-auth" id="nav-auth"></div>
+  </header>
+
+  <main class="main-container page-enter">
+
+    <!-- ACTIVE INVESTMENT SUMMARY -->
+    <section class="invest-active-card animate-in">
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text-muted);margin-bottom:var(--sp-2)">INVERSIÓN TOTAL ACTIVA</div>
+        <div style="font-size:clamp(2rem,6vw,3rem);font-weight:700;font-family:'Space Mono',monospace;line-height:1">
+          0 <span style="font-size:1rem;color:var(--text-muted);font-weight:500">USDT</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--sp-4);">
+        <div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px">INTERÉS ACUMULADO</div>
+          <div style="font-size:22px;font-weight:700;font-family:'Space Mono',monospace;color:var(--success)">0 USDT</div>
+        </div>
+        <button class="collect-btn" disabled id="collect-btn">
+          <i class="ph ph-hand-coins"></i> COBRAR
+        </button>
+      </div>
+    </section>
+
+    <!-- ALL VIP PLANS -->
+    <section class="animate-in delay-1">
+      <div class="section-header">
+        <h2 class="section-title"><i class="ph ph-crown-simple"></i> PLANES DISPONIBLES</h2>
+        <a href="#" class="section-link" onclick="showToast('Historial de compras próximamente');return false;">
+          HISTORIAL <i class="ph ph-clock-counter-clockwise"></i>
+        </a>
+      </div>
+
+      <div class="vip-grid" id="vip-list">
+        <!-- rendered by JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- VIP DETAIL BOTTOM SHEET -->
+  <div class="modal-backdrop" id="vip-modal">
+    <div class="modal-sheet">
+      <div class="modal-drag-handle"></div>
+      <div id="modal-content"><!-- filled by JS --></div>
+    </div>
+  </div>
+
+  <nav class="tab-bar">
+    <a href="home.html" class="tab-item"><i class="ph ph-house-simple"></i>INICIO</a>
+    <a href="proyectos.html" class="tab-item active"><i class="ph ph-chart-line-up"></i>PLANES</a>
+    <a href="equipo.html" class="tab-item"><i class="ph ph-users-three"></i>EQUIPO</a>
+    <a href="cuenta.html" class="tab-item"><i class="ph ph-user-circle"></i>YO</a>
+  </nav>
+
+  <div class="toast toast-success" id="toast">
+    <i class="ph ph-check-circle toast-icon"></i>
+    <span id="toast-msg">OK</span>
+  </div>
+  <a href="https://wa.me/tu_numero" target="_blank" class="floating-support-btn">
+    <i class="ph ph-whatsapp-logo"></i>
+    <span class="support-text">SOPORTE</span>
+  </a>
+
+  <script src="script.js"></script>
+  <script>
+    const PLANS = [
+      { id:1,  name:'PLAN BÁSICO',     daily:2.90,    price:10,    cycle:60, avail:1 },
+      { id:2,  name:'PLAN PLATA',      daily:11.04,   price:48,    cycle:60, avail:1 },
+      { id:3,  name:'PLAN ORO',        daily:36.00,   price:180,   cycle:60, avail:1 },
+      { id:4,  name:'PLAN PLATINO',    daily:100.80,  price:560,   cycle:60, avail:1 },
+      { id:5,  name:'PLAN DIAMANTE',   daily:285.00,  price:1500,  cycle:60, avail:1 },
+      { id:6,  name:'PLAN ÉLITE',      daily:720.00,  price:3600,  cycle:60, avail:1 },
+      { id:7,  name:'PLAN SUPREMO',    daily:1800.00, price:9000,  cycle:60, avail:1 },
+      { id:8,  name:'PLAN IMPERIAL',   daily:4500.00, price:22000, cycle:60, avail:1 },
+      { id:9,  name:'PLAN LEGEND',     daily:11200.00,price:55000, cycle:60, avail:1 },
+      { id:10, name:'PLAN APEX',       daily:28420.00,price:98000, cycle:60, avail:1 },
+    ];
+
+    // Render plan list
+    const list = document.getElementById('vip-list');
+    PLANS.forEach(p => {
+      const card = document.createElement('a');
+      card.href = '#';
+      card.className = 'vip-card';
+      card.dataset.tier = p.id;
+      card.onclick = (e) => { e.preventDefault(); openModal(p); };
+      card.innerHTML = `
+        <div class="vip-badge">VIP<br>${p.id}</div>
+        <div class="vip-info">
+          <div class="vip-name">${p.name}</div>
+          <div>
+            <span class="vip-profit">$${p.daily.toLocaleString('en-US',{minimumFractionDigits:2})}</span>
+            <span class="vip-profit-label">/ DÍA</span>
+          </div>
+        </div>
+        <div class="vip-price">
+          <div class="vip-price-amount">$${p.price.toLocaleString('en-US',{minimumFractionDigits:2})}</div>
+          <span class="vip-price-label">PRECIO</span>
+        </div>
+        <i class="ph ph-arrow-right vip-arrow"></i>`;
+      list.appendChild(card);
+    });
+
+    function openModal(p) {
+      const total = p.daily * p.cycle;
+      const roi = (((total - p.price) / p.price) * 100).toFixed(1);
+      document.getElementById('modal-content').innerHTML = `
+        <div style="display:flex;align-items:center;gap:var(--sp-4);margin-bottom:var(--sp-6)">
+          <div class="vip-badge" data-tier="${p.id}" style="--tier-color:var(--vip${p.id})">VIP<br>${p.id}</div>
+          <div>
+            <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted)">PLAN DE INVERSIÓN</div>
+            <div style="font-size:20px;font-weight:700;letter-spacing:.04em;text-transform:uppercase">${p.name}</div>
+          </div>
+        </div>
+
+        <div class="invest-summary">
+          <div class="invest-row">
+            <span class="invest-row-lbl">GANANCIA DIARIA</span>
+            <span class="invest-row-val green">$${p.daily.toLocaleString('en-US',{minimumFractionDigits:2})} USDT</span>
+          </div>
+          <div class="invest-row">
+            <span class="invest-row-lbl">CICLO DE INVERSIÓN</span>
+            <span class="invest-row-val">${p.cycle} DÍAS</span>
+          </div>
+          <div class="invest-row">
+            <span class="invest-row-lbl">RETORNO TOTAL</span>
+            <span class="invest-row-val brand">$${total.toLocaleString('en-US',{minimumFractionDigits:2})} USDT</span>
+          </div>
+          <div class="invest-row">
+            <span class="invest-row-lbl">ROI</span>
+            <span class="invest-row-val green">+${roi}%</span>
+          </div>
+          <div class="invest-row">
+            <span class="invest-row-lbl">INVERSIONES/DÍA</span>
+            <span class="invest-row-val">${p.avail}</span>
+          </div>
+          <div class="invest-row">
+            <span class="invest-row-lbl">DISPONIBLES</span>
+            <span class="invest-row-val">${p.avail}</span>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--sp-4);">
+          <div>
+            <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px">PRECIO</div>
+            <div style="font-size:26px;font-weight:700;font-family:'Space Mono',monospace;color:var(--brand)">$${p.price.toLocaleString('en-US',{minimumFractionDigits:2})} USDT</div>
+          </div>
+          <button class="btn btn-primary btn-lg" onclick="buyNow(${p.id}, ${p.price})">
+            <i class="ph ph-lightning"></i> COMPRAR AHORA
+          </button>
+        </div>
+
+        <p style="font-size:12px;color:var(--text-muted);margin-top:var(--sp-5);line-height:1.6;border-top:1px solid var(--border);padding-top:var(--sp-4)">
+          ⚠️ El monto mínimo de inversión es $${p.price} USDT. Solo puedes realizar ${p.avail} inversión(es) de este plan por día. Los intereses se acumulan diariamente y pueden cobrarse en la sección de proyectos.
+        </p>`;
+      document.getElementById('vip-modal').classList.add('open');
+    }
+
+    function buyNow(id, price) {
+      closeModal();
+      showToast(`Redirigiendo a depósito por $${price} USDT…`);
+      setTimeout(() => window.location.href = 'deposito.html', 1200);
+    }
+
+    function closeModal() {
+      document.getElementById('vip-modal').classList.remove('open');
+    }
+
+    document.getElementById('vip-modal').addEventListener('click', e => {
+      if (e.target === e.currentTarget) closeModal();
+    });
+
+    // Anchor scroll from home.html
+    const hash = location.hash;
+    if (hash) {
+      const tier = hash.replace('#vip','');
+      const plan = PLANS.find(p => p.id == tier);
+      if (plan) setTimeout(() => openModal(plan), 600);
+    }
+  </script>
+</body>
+</html>

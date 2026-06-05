@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tigger — Retirar</title>
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js"></script>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .method-chips {
+      display: flex; flex-wrap: wrap; gap: var(--sp-2);
+      margin-bottom: var(--sp-5);
+    }
+    .method-chip {
+      padding: 8px 16px;
+      border-radius: var(--r-md);
+      border: 1.5px solid var(--border-strong);
+      background: var(--bg-elevated);
+      font-family: inherit; font-size: 12px; font-weight: 700;
+      letter-spacing: .04em; text-transform: uppercase;
+      color: var(--text-secondary); cursor: pointer;
+      transition: all var(--dur-fast) var(--ease-smooth);
+      min-height: 40px;
+    }
+    .method-chip.active {
+      border-color: var(--brand);
+      background: var(--brand-glow);
+      color: var(--brand);
+    }
+    .method-chip:hover { border-color: var(--border-brand); color: var(--brand); }
+
+    .withdraw-note {
+      background: var(--warning-bg);
+      border: 1px solid rgba(234,179,8,.25);
+      border-radius: var(--r-md);
+      padding: var(--sp-4);
+      font-size: 12px; color: var(--text-secondary);
+      line-height: 1.65;
+    }
+    .withdraw-note strong { color: var(--warning); }
+  </style>
+</head>
+<body>
+
+  <header class="navbar" id="navbar">
+    <a href="cuenta.html" class="logo-container">
+      <div class="logo-icon"><img src="tigger.png" alt="Tigger"></div>
+      <span class="logo-wordmark">TIGGER</span>
+    </a>
+    <nav class="nav-menu">
+      <a href="cuenta.html" class="nav-link back-link">
+        <i class="ph ph-arrow-left"></i>
+        <span>VOLVER</span>
+      </a>
+    </nav>
+    <div class="nav-auth" id="nav-auth"></div>
+  </header>
+
+  <main class="main-container page-enter">
+    <section class="form-section animate-in" style="padding:0;justify-content:flex-start;">
+      <div class="form-box" style="max-width:600px;">
+
+        <div class="form-header" style="margin-bottom:var(--sp-5);">
+          <h2><i class="ph ph-arrow-line-up"></i> RETIRAR FONDOS</h2>
+          <p>Indica el destino y confirma tu identidad para procesar el retiro de forma segura.</p>
+        </div>
+
+        <!-- Balance display -->
+        <div class="card" style="margin-bottom:var(--sp-6);display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px">SALDO DISPONIBLE</div>
+            <div style="font-size:28px;font-weight:700;font-family:'Space Mono',monospace;">0 <span style="font-size:14px;color:var(--text-muted)">USDT</span></div>
+          </div>
+          <i class="ph ph-wallet" style="font-size:32px;color:var(--text-disabled)"></i>
+        </div>
+
+        <form class="tigger-form" id="withdraw-form" onsubmit="handleSubmit(event,'withdraw')">
+
+          <!-- Method chips -->
+          <div class="form-group">
+            <label><i class="ph ph-arrows-split"></i> MÉTODO DE RETIRO</label>
+            <div class="method-chips" id="method-chips">
+              <button type="button" class="method-chip active" onclick="selectMethod(this,'BEP20-USDT')">BEP20-USDT</button>
+              <button type="button" class="method-chip" onclick="selectMethod(this,'TRC20-USDT')">TRC20-USDT</button>
+              <button type="button" class="method-chip" onclick="selectMethod(this,'ETH-USDT')">ETH-USDT</button>
+              <button type="button" class="method-chip" onclick="selectMethod(this,'POLYGON-USDC')">POLYGON-USDC</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label><i class="ph ph-coin"></i> MONTO A RETIRAR</label>
+            <p class="input-help">Mínimo: 2.000 USDT — Máximo: 999,999.000 USDT</p>
+            <input type="number" id="monto" class="form-control"
+              placeholder="0.00" min="2" step="0.01" required inputmode="decimal">
+          </div>
+
+          <div class="form-group">
+            <label><i class="ph ph-wallet"></i> DIRECCIÓN DE DESTINO</label>
+            <input type="text" id="address" class="form-control"
+              placeholder="Tu dirección de wallet" required
+              style="font-family:'Space Mono',monospace;font-size:13px;">
+          </div>
+
+          <div class="form-group" style="max-width:280px;">
+            <label><i class="ph ph-lock-simple"></i> CONTRASEÑA DE CONFIRMACIÓN</label>
+            <div style="position:relative;">
+              <input type="password" id="pwd" class="form-control" placeholder="Tu contraseña" required>
+              <button type="button"
+                onclick="const i=document.getElementById('pwd');const b=this.querySelector('i');i.type=i.type==='text'?'password':'text';b.className=i.type==='text'?'ph ph-eye-slash':'ph ph-eye';"
+                style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:18px;padding:4px;">
+                <i class="ph ph-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div style="display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--text-secondary);">
+              <span>REALMENTE RECIBIRÁS</span>
+              <span style="font-weight:700;font-family:'Space Mono',monospace;color:var(--text-primary)" id="receive-amt">0 USDT</span>
+            </div>
+          </div>
+
+          <div class="withdraw-note">
+            ⚠️ <strong>Condiciones de retiro:</strong> El monto mínimo es 2 USDT y solo puedes retirar una vez al día.
+            Existe una comisión del <strong>10%</strong> por cada retiro. Los retiros se procesan en un plazo de 24 horas.
+          </div>
+
+          <button type="submit" class="btn btn-ghost btn-lg btn-block form-submit-btn" id="submit-btn">
+            <i class="ph ph-paper-plane-tilt"></i> CONFIRMAR RETIRO
+          </button>
+
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tab-bar">
+    <a href="home.html" class="tab-item"><i class="ph ph-house-simple"></i>INICIO</a>
+    <a href="proyectos.html" class="tab-item"><i class="ph ph-chart-line-up"></i>PLANES</a>
+    <a href="equipo.html" class="tab-item"><i class="ph ph-users-three"></i>EQUIPO</a>
+    <a href="cuenta.html" class="tab-item active"><i class="ph ph-user-circle"></i>YO</a>
+  </nav>
+
+  <div class="toast toast-success" id="toast">
+    <i class="ph ph-check-circle toast-icon"></i>
+    <span id="toast-msg">Retiro confirmado</span>
+  </div>
+  <a href="https://wa.me/tu_numero" target="_blank" class="floating-support-btn">
+    <i class="ph ph-whatsapp-logo"></i>
+    <span class="support-text">SOPORTE</span>
+  </a>
+
+  <script src="script.js"></script>
+  <script>
+    let selectedMethod = 'BEP20-USDT';
+    function selectMethod(btn, name) {
+      document.querySelectorAll('.method-chip').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      selectedMethod = name;
+    }
+
+    // Live "actually received" calc (10% fee)
+    document.getElementById('monto')?.addEventListener('input', e => {
+      const val = parseFloat(e.target.value) || 0;
+      const fee = val * 0.10;
+      const recv = Math.max(0, val - fee).toFixed(3);
+      document.getElementById('receive-amt').textContent = recv + ' USDT';
+    });
+  </script>
+</body>
+</html>

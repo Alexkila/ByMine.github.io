@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tigger — Inicio</title>
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js"></script>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Persuasion: FOMO banner */
+    .fomo-strip {
+      background:linear-gradient(90deg, var(--accent-glow), var(--brand-glow));
+      border:1px solid var(--border-brand);
+      border-radius:var(--r-lg);
+      padding:var(--sp-3) var(--sp-5);
+      display:flex; align-items:center; gap:var(--sp-3);
+      font-size:13px; font-weight:600; color:var(--brand);
+    }
+    .fomo-strip .ph { font-size:18px; flex-shrink:0; }
+
+    /* Balance skeleton on load */
+    @keyframes shimmer {
+      0%   { background-position:-200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    /* VIP tier colors */
+    [data-tier="1"]  { --tier-color: #a0aec0; }
+    [data-tier="2"]  { --tier-color: #68d391; }
+    [data-tier="3"]  { --tier-color: #63b3ed; }
+    [data-tier="4"]  { --tier-color: #b794f4; }
+    [data-tier="5"]  { --tier-color: #f6ad55; }
+    [data-tier="6"]  { --tier-color: #fc8181; }
+    [data-tier="7"]  { --tier-color: #f6e05e; }
+    [data-tier="8"]  { --tier-color: #76e4f7; }
+    [data-tier="9"]  { --tier-color: #f687b3; }
+    [data-tier="10"] { --tier-color: #ffd700; }
+
+    /* Horizontal scroll for member cards */
+    .member-scroll {
+      display:flex; gap:var(--sp-3);
+      overflow-x:auto; padding-bottom:var(--sp-2);
+      scrollbar-width:none;
+    }
+    .member-scroll::-webkit-scrollbar { display:none; }
+    .member-scroll-card {
+      background:var(--bg-elevated);
+      border:1px solid var(--border);
+      border-radius:var(--r-lg);
+      padding:var(--sp-4) var(--sp-5);
+      flex-shrink:0; min-width:160px;
+    }
+    .member-scroll-amount {
+      font-size:17px; font-weight:700;
+      font-family:'Space Mono',monospace;
+      color:var(--success);
+    }
+    .member-scroll-user { font-size:11px; color:var(--text-muted); margin-top:3px; }
+    .member-scroll-time { font-size:10px; color:var(--text-disabled); margin-top:2px; }
+
+    /* Slide-in announcement */
+    #announce-backdrop {
+      position:fixed; inset:0; z-index:var(--z-modal);
+      background:rgba(0,0,0,.75);
+      backdrop-filter:blur(8px);
+      display:flex; align-items:center;
+      justify-content:center; padding:var(--sp-6);
+      opacity:0; pointer-events:none;
+      transition:opacity var(--dur-base) var(--ease-smooth);
+    }
+    #announce-backdrop.open { opacity:1; pointer-events:all; }
+
+    .announce-card {
+      background:var(--bg-raised);
+      border:1px solid var(--border-strong);
+      border-radius:var(--r-2xl);
+      padding:var(--sp-8);
+      width:100%; max-width:440px;
+      max-height:80dvh;
+      display:flex; flex-direction:column;
+      transform:translateY(20px) scale(.96);
+      transition:transform var(--dur-slow) var(--ease-spring);
+    }
+    #announce-backdrop.open .announce-card { transform:translateY(0) scale(1); }
+
+    .announce-title {
+      font-size:18px; font-weight:700;
+      letter-spacing:.04em; text-transform:uppercase;
+      color:var(--text-primary); margin-bottom:var(--sp-5);
+      display:flex; align-items:center; gap:var(--sp-3);
+    }
+    .announce-title .ph { color:var(--brand); }
+
+    .announce-body {
+      flex:1; overflow-y:auto;
+      font-size:14px; color:var(--text-secondary);
+      line-height:1.75; padding-right:var(--sp-2);
+    }
+    .announce-body::-webkit-scrollbar { width:3px; }
+    .announce-body::-webkit-scrollbar-thumb { background:var(--bg-overlay); border-radius:var(--r-full); }
+
+    .announce-actions {
+      display:grid; grid-template-columns:1fr 1fr;
+      gap:var(--sp-3); margin-top:var(--sp-6);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <header class="navbar" id="navbar">
+    <a href="home.html" class="logo-container">
+      <div class="logo-icon"><img src="tigger.png" alt="Tigger"></div>
+      <span class="logo-wordmark">TIGGER</span>
+    </a>
+    <nav class="nav-menu" id="top-nav">
+      <a href="home.html" class="nav-link active" data-tab="home">
+        <i class="ph ph-house-simple"></i>
+        <span>INICIO</span>
+      </a>
+      <a href="proyectos.html" class="nav-link" data-tab="projects">
+        <i class="ph ph-chart-line-up"></i>
+        <span>PROYECTOS</span>
+      </a>
+      <a href="equipo.html" class="nav-link" data-tab="team">
+        <i class="ph ph-users-three"></i>
+        <span>EQUIPO</span>
+      </a>
+      <a href="cuenta.html" class="nav-link" data-tab="me">
+        <i class="ph ph-user-circle"></i>
+        <span>MI CUENTA</span>
+      </a>
+    </nav>
+    <div class="nav-auth" id="nav-auth"></div>
+  </header>
+
+  <main class="main-container page-enter">
+
+    <!-- TICKER -->
+    <div class="ticker animate-in">
+      <i class="ph ph-bell-ringing ticker-icon"></i>
+      <div class="ticker-track">
+        <span class="ticker-inner">
+          🔔 ¿Estás perdiendo oportunidades de mercado? &nbsp;&nbsp;&nbsp; 💎 Tigger ofrece rendimientos diarios automatizados &nbsp;&nbsp;&nbsp; 🚀 Únete a miles de inversores activos &nbsp;&nbsp;&nbsp; ⚡ El mercado está en etapa de dividendos &nbsp;&nbsp;&nbsp; 🌐 Procesamiento en tiempo real 24/7 &nbsp;&nbsp;&nbsp; 🔔 ¿Estás perdiendo oportunidades de mercado? &nbsp;&nbsp;&nbsp; 💎 Tigger ofrece rendimientos diarios automatizados &nbsp;&nbsp;&nbsp; 🚀 Únete a miles de inversores activos
+        </span>
+      </div>
+    </div>
+
+    <!-- BALANCE HERO -->
+    <section class="balance-hero animate-in delay-1">
+      <div class="balance-eyebrow">
+        <i class="ph ph-wallet"></i>
+        SALDO DISPONIBLE
+        <span style="margin-left:auto">
+          <span class="live-dot-wrap"></span>
+        </span>
+      </div>
+      <div class="balance-display" style="margin:var(--sp-3) 0;">
+        <span class="balance-currency">$</span>
+        <span class="balance-amount">0.00</span>
+        <span style="font-size:14px;color:var(--text-muted);margin-left:6px;font-weight:500">USDT</span>
+      </div>
+      <div class="balance-subtitle">
+        <i class="ph ph-trend-up" style="color:var(--success)"></i>
+        Ganancia acumulada hoy:
+        <strong style="color:var(--success);margin-left:4px;font-family:'Space Mono',monospace;">+$0.00</strong>
+      </div>
+
+      <!-- ACTION GRID — Fitts: large icons, generous spacing -->
+      <div class="action-grid" style="margin-top:var(--sp-6);">
+        <a href="deposito.html" class="action-btn">
+          <div class="action-btn-icon brand"><i class="ph ph-arrow-line-down"></i></div>
+          DEPOSITAR
+        </a>
+        <a href="retiro.html" class="action-btn">
+          <div class="action-btn-icon accent"><i class="ph ph-arrow-line-up"></i></div>
+          RETIRAR
+        </a>
+        <a href="proyectos.html" class="action-btn">
+          <div class="action-btn-icon success"><i class="ph ph-chart-line-up"></i></div>
+          INVERTIR
+        </a>
+        <a href="equipo.html" class="action-btn">
+          <div class="action-btn-icon info"><i class="ph ph-share-network"></i></div>
+          INVITAR
+        </a>
+      </div>
+    </section>
+
+    <!-- FOMO: early mover advantage -->
+    <div class="fomo-strip animate-in delay-2">
+      <i class="ph ph-fire"></i>
+      <span>El mercado está en <strong>etapa de dividendos</strong>. Los primeros inversores obtienen mayores rendimientos.</span>
+    </div>
+
+    <!-- VIP PROJECTS HALL -->
+    <section class="animate-in delay-2">
+      <div class="section-header">
+        <h2 class="section-title">
+          <i class="ph ph-crown-simple"></i>
+          PLANES DE INVERSIÓN
+        </h2>
+        <a href="proyectos.html" class="section-link">
+          VER TODOS <i class="ph ph-arrow-right"></i>
+        </a>
+      </div>
+
+      <div class="vip-grid">
+        <!-- VIP 1 -->
+        <a href="proyectos.html#vip1" class="vip-card" data-tier="1">
+          <div class="vip-badge">VIP<br>1</div>
+          <div class="vip-info">
+            <div class="vip-name">PLAN BÁSICO</div>
+            <div>
+              <span class="vip-profit">$2.90</span>
+              <span class="vip-profit-label">/ DÍA</span>
+            </div>
+          </div>
+          <div class="vip-price">
+            <div class="vip-price-amount">$10.00</div>
+            <span class="vip-price-label">PRECIO</span>
+          </div>
+          <i class="ph ph-arrow-right vip-arrow"></i>
+        </a>
+
+        <!-- VIP 2 -->
+        <a href="proyectos.html#vip2" class="vip-card" data-tier="2">
+          <div class="vip-badge">VIP<br>2</div>
+          <div class="vip-info">
+            <div class="vip-name">PLAN PLATA</div>
+            <div>
+              <span class="vip-profit">$11.04</span>
+              <span class="vip-profit-label">/ DÍA</span>
+            </div>
+          </div>
+          <div class="vip-price">
+            <div class="vip-price-amount">$48.00</div>
+            <span class="vip-price-label">PRECIO</span>
+          </div>
+          <i class="ph ph-arrow-right vip-arrow"></i>
+        </a>
+
+        <!-- VIP 3 -->
+        <a href="proyectos.html#vip3" class="vip-card" data-tier="3">
+          <div class="vip-badge">VIP<br>3</div>
+          <div class="vip-info">
+            <div class="vip-name">PLAN ORO</div>
+            <div>
+              <span class="vip-profit">$36.00</span>
+              <span class="vip-profit-label">/ DÍA</span>
+            </div>
+          </div>
+          <div class="vip-price">
+            <div class="vip-price-amount">$180.00</div>
+            <span class="vip-price-label">PRECIO</span>
+          </div>
+          <i class="ph ph-arrow-right vip-arrow"></i>
+        </a>
+
+        <!-- VIP 4 -->
+        <a href="proyectos.html#vip4" class="vip-card" data-tier="4">
+          <div class="vip-badge">VIP<br>4</div>
+          <div class="vip-info">
+            <div class="vip-name">PLAN PLATINO</div>
+            <div>
+              <span class="vip-profit">$100.80</span>
+              <span class="vip-profit-label">/ DÍA</span>
+            </div>
+          </div>
+          <div class="vip-price">
+            <div class="vip-price-amount">$560.00</div>
+            <span class="vip-price-label">PRECIO</span>
+          </div>
+          <i class="ph ph-arrow-right vip-arrow"></i>
+        </a>
+
+        <!-- VIP 5 -->
+        <a href="proyectos.html#vip5" class="vip-card" data-tier="5">
+          <div class="vip-badge">VIP<br>5</div>
+          <div class="vip-info">
+            <div class="vip-name">PLAN DIAMANTE</div>
+            <div>
+              <span class="vip-profit">$285.00</span>
+              <span class="vip-profit-label">/ DÍA</span>
+            </div>
+          </div>
+          <div class="vip-price">
+            <div class="vip-price-amount">$1,500.00</div>
+            <span class="vip-price-label">PRECIO</span>
+          </div>
+          <i class="ph ph-arrow-right vip-arrow"></i>
+        </a>
+      </div>
+    </section>
+
+    <!-- RECENT MEMBER EARNINGS (social proof) -->
+    <section class="animate-in delay-3">
+      <div class="section-header">
+        <h2 class="section-title">
+          <i class="ph ph-users"></i>
+          GANANCIAS RECIENTES
+        </h2>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div class="live-dot-wrap"></div>
+          <span style="font-size:11px;font-weight:700;letter-spacing:.05em;color:var(--success);text-transform:uppercase;">En vivo</span>
+        </div>
+      </div>
+      <div class="member-scroll" id="member-scroll">
+        <!-- populated by JS -->
+      </div>
+    </section>
+
+    <!-- HISTORIAL GLOBAL -->
+    <section class="animate-in delay-3">
+      <div class="section-header">
+        <h2 class="section-title"><i class="ph ph-globe-hemisphere-west"></i> HISTORIAL GLOBAL</h2>
+      </div>
+      <div class="card">
+        <div class="table-wrapper" style="margin-top:0">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>USUARIO</th>
+                <th>MÉTODO</th>
+                <th>MONTO</th>
+                <th>FECHA</th>
+                <th>ESTADO</th>
+              </tr>
+            </thead>
+            <tbody id="global-tbody">
+              <tr>
+                <td style="font-family:'Space Mono',monospace;color:var(--text-muted);font-size:12px;">user_***99</td>
+                <td>Crypto (USDT)</td>
+                <td style="font-weight:700;color:var(--text-primary);font-family:'Space Mono',monospace;">$430.00</td>
+                <td style="color:var(--text-muted);font-size:12px;">28/05 · 15:30</td>
+                <td><span class="badge badge-success">ÉXITO</span></td>
+              </tr>
+              <tr>
+                <td style="font-family:'Space Mono',monospace;color:var(--text-muted);font-size:12px;">user_***88</td>
+                <td>Banco local</td>
+                <td style="font-weight:700;color:var(--text-primary);font-family:'Space Mono',monospace;">$1,200.00</td>
+                <td style="color:var(--text-muted);font-size:12px;">28/05 · 14:12</td>
+                <td><span class="badge badge-success">ÉXITO</span></td>
+              </tr>
+              <tr>
+                <td style="font-family:'Space Mono',monospace;color:var(--text-muted);font-size:12px;">user_***77</td>
+                <td>Crypto (USDT)</td>
+                <td style="font-weight:700;color:var(--text-primary);font-family:'Space Mono',monospace;">$95.00</td>
+                <td style="color:var(--text-muted);font-size:12px;">28/05 · 11:05</td>
+                <td><span class="badge badge-success">ÉXITO</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- BOTTOM TAB BAR (mobile) -->
+  <nav class="tab-bar">
+    <a href="home.html" class="tab-item active" data-tab="home">
+      <i class="ph ph-house-simple"></i>
+      INICIO
+    </a>
+    <a href="proyectos.html" class="tab-item" data-tab="projects">
+      <i class="ph ph-chart-line-up"></i>
+      PROYECTOS
+    </a>
+    <a href="equipo.html" class="tab-item" data-tab="team">
+      <i class="ph ph-users-three"></i>
+      EQUIPO
+    </a>
+    <a href="cuenta.html" class="tab-item" data-tab="me">
+      <i class="ph ph-user-circle"></i>
+      YO
+    </a>
+  </nav>
+
+  <!-- ANNOUNCEMENT MODAL -->
+  <div id="announce-backdrop">
+    <div class="announce-card">
+      <h3 class="announce-title"><i class="ph ph-megaphone-simple"></i> ANUNCIO</h3>
+      <div class="announce-body">
+        <p>🚨🚨🚨 El portal de capital global está oficialmente abierto 🚨🚨🚨</p>
+        <br>
+        <p>💎 <strong>Tigger</strong> ha sido lanzado oficialmente. ¿Estás perdiendo oportunidades de mercado? ¿Sigues invirtiendo de forma tradicional e ineficiente?</p>
+        <br>
+        <p>Ahora, ha comenzado una nueva forma de crecimiento de activos.</p>
+        <br>
+        <p>🔥 Tigger entra oficialmente al mercado global 🔥</p>
+        <br>
+        <p><strong>¿Qué es Tigger?</strong><br>
+        Es una plataforma de gestión de activos con estrategias de trading cuantitativo e inteligente como núcleo. A través de sistemas de arbitraje multi-mercado y motores de trading automatizados, los fondos pueden moverse continuamente buscando oportunidades de ganancias. Aquí, ya no observas el mercado, el sistema opera tus activos 24 horas al día.</p>
+        <br>
+        <p>⚡ ¿Por qué unirte ahora?<br>
+        ✓ El mercado está en etapa de dividendos<br>
+        ✓ Los primeros participantes obtienen las mejores posiciones<br>
+        ✓ Rendimientos diarios garantizados por plan<br>
+        ✓ Red de referidos con comisiones en 3 niveles</p>
+      </div>
+      <div class="announce-actions">
+        <button class="btn btn-subtle" onclick="closeAnnounce()">CERRAR</button>
+        <a href="proyectos.html" class="btn btn-primary" onclick="closeAnnounce()">
+          VER PLANES <i class="ph ph-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast toast-success" id="toast">
+    <i class="ph ph-check-circle toast-icon"></i>
+    <span id="toast-msg">OK</span>
+  </div>
+
+  <!-- FLOATING SUPPORT -->
+  <a href="https://wa.me/tu_numero" target="_blank" class="floating-support-btn">
+    <i class="ph ph-whatsapp-logo"></i>
+    <span class="support-text">SOPORTE</span>
+  </a>
+
+  <script src="script.js"></script>
+  <script>
+    // Announcement on first load
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!sessionStorage.getItem('announce_shown')) {
+        setTimeout(() => {
+          document.getElementById('announce-backdrop').classList.add('open');
+          sessionStorage.setItem('announce_shown','1');
+        }, 800);
+      }
+
+      // Populate social proof member scroll
+      const members = [
+        { amount:'+$964.00', user:'qwert****yui@aol.com', time:'Hace 2 min' },
+        { amount:'+$29.00',  user:'qwert****yui@gmail.com', time:'Hace 5 min' },
+        { amount:'+$26.00',  user:'simon****bennett@gmail.com', time:'Hace 8 min' },
+        { amount:'+$150.00', user:'user_***55@mail.com', time:'Hace 11 min' },
+        { amount:'+$430.00', user:'user_***99@mail.com', time:'Hace 15 min' },
+        { amount:'+$1,200.00', user:'user_***88@mail.com', time:'Hace 18 min' },
+      ];
+      const scroll = document.getElementById('member-scroll');
+      members.forEach(m => {
+        const el = document.createElement('div');
+        el.className = 'member-scroll-card';
+        el.innerHTML = `
+          <div class="member-scroll-amount">${m.amount}</div>
+          <div class="member-scroll-user">${m.user}</div>
+          <div class="member-scroll-time">${m.time}</div>`;
+        scroll.appendChild(el);
+      });
+    });
+
+    function closeAnnounce() {
+      document.getElementById('announce-backdrop').classList.remove('open');
+    }
+    document.getElementById('announce-backdrop').addEventListener('click', e => {
+      if (e.target === e.currentTarget) closeAnnounce();
+    });
+  </script>
+</body>
+</html>
