@@ -21,15 +21,15 @@ function renderAuthNav() {
       </button>`;
   } else {
     container.innerHTML = `
-      <a href="login.html" class="btn-nav-login">INICIAR SESIÓN</a>
-      <a href="login.html" class="btn-nav-register">REGISTRARSE</a>`;
+      <a href="index.html" class="btn-nav-login">INICIAR SESIÓN</a>
+      <a href="index.html" class="btn-nav-register">REGISTRARSE</a>`;
   }
 }
 
 function handleLogout() {
   localStorage.setItem('tigger_session','inactive');
   showToast('Sesión cerrada');
-  setTimeout(() => window.location.href = 'login.html', 900);
+  setTimeout(() => window.location.href = 'index.html', 900);
 }
 
 // ── INIT ─────────────────────────────────────────────────────────
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const publicPages = ['login.html','index.html'];
   const isPublic = publicPages.some(p => location.pathname.endsWith(p));
   if (!isPublic && getSession() !== 'active') {
-    window.location.href = 'login.html';
+    window.location.href = 'index.html';
     return;
   }
 
